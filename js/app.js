@@ -12,6 +12,7 @@ var pic3 = document.getElementById("pic3");
 var resBut = document.getElementById("resBut");
 var tblSection = document.getElementById("tblSection");
 var resTbl = document.getElementById("resTbl");
+var tBody = document.getElementById("appendHere");
 
 //product constructor
 
@@ -19,11 +20,12 @@ var Product = function(name){
 	this.name = name.slice(0, -4);
 	this.tally = 0;
 	this.views = 0;
-	this.voteRate = function(){
-		return this.tally / this.views;
-	};
 	this.fileSource = "img/" + name;
 	products.push(this);
+};
+
+Product.prototype.voteRate = function(){
+	return this.tally / this.views;
 };
 
 //function declarations
@@ -53,8 +55,6 @@ function makeDisplay(arrayFunc, products){
 	randNums = arrayFunc;
 	for (var i=0 ; i < arrayFunc.length ; i++){
 		display.push(products[arrayFunc[i]]);
-		// console.log(products[display[display.length -1]]);
-		// products[display[display.length - 1]].views += 1;
 	}
 	for (var i = 0 ; i < randNums.length ; i++){
 		products[randNums[i]].views += 1;
@@ -70,7 +70,6 @@ function productList(images){
 }
 
 function showDisplay(display){
-	console.log("made it to showDisplay");
 	pic1.innerHTML = "<img src ='" + display[0].fileSource + "''>";
 	pic2.innerHTML = "<img src ='" + display[1].fileSource + "''>";
 	pic3.innerHTML = "<img src ='" + display[2].fileSource + "''>";
@@ -78,10 +77,10 @@ function showDisplay(display){
 }
 
 function compare(a,b){
-	if (a < b){
-		return -1;
-	} else if (a > b){
+	if (a.voteRate() < b.voteRate()){
 		return 1;
+	} else if (a.voteRate() > b.voteRate()){
+		return -1;
 	} else {
 		return 0;
 	}
@@ -97,7 +96,7 @@ function checkZero(){
 
 function productSort(){
 	if (!checkZero()){
-	products.sort(compare(products[i].voteRate(), products[i +1]).voteRate());
+		products.sort(compare);
 	} else {
 		console.log("insufficient data");
 	}
@@ -111,10 +110,17 @@ function newPics(){
 	} else {
 		resBut.style.display = 'none';
 	}
-	tblSection.style.display = 'none';
+	// tblSection.style.display = 'none';
 }
 //object creator function calls
-
+function tableRemover(){
+	console.log("made it to table remover")
+	for(i=0; i < products.length ; i++){
+		if (tBody.firstChild){
+		tBody.removeChild(tBody.firstChild);
+		}
+	}
+}
 productList(images);
 
 
@@ -142,30 +148,31 @@ pic3.addEventListener("click", function(e){
 	newPics();
 });
 resBut.addEventListener("click", function(e){
-	if (!checkZero){
+	console.log("listener is listening");
+	if (!checkZero()){
+		console.log("passed checkZero");
 		productSort();
-		tblSection.style.display("block");
+		console.log("passed sort");
+		tableRemover();
+		console.log("passed remover");
+		tblSection.style.display = "block";
 		for (i = 0 ; i < products.length ; i++){
-			var row = createElement("row");
-			var th = createElement("th");
+			var trEl = document.createElement("tr");
+			var th = document.createElement("th");
 			th.textContent = products[i].name;
-			var td1 = createElement("td");
-			td1.textContent = products[i].voteRate();
-			var td2 = createElement("td");
-			td2.textContent = product[i].tally;
-			var td3 = createElement("td");
-			td3.textContent = product[i].views;
-			row.appendChild(th);
-			row.appendChild(td1);
-			row.appendChild(td2);
-			row.appendChild(td3);
-			resTbl.appendChild(row);
+			var td1 = document.createElement("td");
+			td1.textContent = Math.floor(products[i].voteRate() * 100);
+			var td2 = document.createElement("td");
+			td2.textContent = products[i].tally;
+			var td3 = document.createElement("td");
+			td3.textContent = products[i].views;
+			trEl.appendChild(th);
+			trEl.appendChild(td1);
+			trEl.appendChild(td2);
+			trEl.appendChild(td3);
+			tBody.appendChild(trEl);
 		}
 	}
 });
-
-
-
-
 
 

@@ -115,7 +115,14 @@ function newPics(){
 	// tblSection.style.display = 'none';
 }
 //object creator function calls
-
+function tableRemover(){
+	console.log("made it to table remover")
+	for(i=0; i < products.length ; i++){
+		if (tBody.firstChild){
+		tBody.removeChild(tBody.firstChild);
+		}
+	}
+}
 productList(images);
 
 
@@ -147,6 +154,9 @@ resBut.addEventListener("click", function(e){
 	if (!checkZero()){
 		console.log("passed checkZero");
 		productSort();
+		console.log("passed sort");
+		tableRemover();
+		console.log("passed remover");
 		tblSection.style.display = "block";
 		for (i = 0 ; i < products.length ; i++){
 			var trEl = document.createElement("tr");

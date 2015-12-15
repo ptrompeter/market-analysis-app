@@ -25,7 +25,7 @@ var Product = function(name){
 };
 
 Product.prototype.voteRate = function(){
-	return this.tally / this.views
+	return this.tally / this.views;
 };
 
 //function declarations
@@ -55,8 +55,6 @@ function makeDisplay(arrayFunc, products){
 	randNums = arrayFunc;
 	for (var i=0 ; i < arrayFunc.length ; i++){
 		display.push(products[arrayFunc[i]]);
-		// console.log(products[display[display.length -1]]);
-		// products[display[display.length - 1]].views += 1;
 	}
 	for (var i = 0 ; i < randNums.length ; i++){
 		products[randNums[i]].views += 1;

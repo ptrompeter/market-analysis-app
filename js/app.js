@@ -1,6 +1,6 @@
 //global variables
 
-var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon.jpg", "pen.jpg", "shark.jpg", "sweep.png", 
+var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon2.jpg", "pen.jpg", "shark.jpg", "sweep.png",
 "unicorn.jpg", "usb.gif"];
 var products = [];
 var display = [];
@@ -13,6 +13,7 @@ var resBut = document.getElementById("resBut");
 var tblSection = document.getElementById("tblSection");
 var resTbl = document.getElementById("resTbl");
 var tBody = document.getElementById("appendHere");
+var graphs = document.getElementById("graphs");
 
 //product constructor
 
@@ -25,7 +26,7 @@ var Product = function(name){
 };
 
 Product.prototype.voteRate = function(){
-	return this.tally / this.views;
+	return Math.floor(this.tally / this.views * 100);
 };
 
 //function declarations
@@ -46,7 +47,6 @@ function arrayMaker(products){
 			array.push(num);
 		}
 	}
-	console.log(array);
 	return array;
 }
 
@@ -105,6 +105,9 @@ function productSort(){
 function newPics(){
 	makeDisplay(arrayMaker(products), products);
 	showDisplay(display);
+	tblSection.style.display = "none";
+	graphs.style.display = "none";
+
 	if (voteCount % 15 === 0){
 		resBut.style.display = 'block';
 	} else {
@@ -112,15 +115,77 @@ function newPics(){
 	}
 	// tblSection.style.display = 'none';
 }
-//object creator function calls
+
 function tableRemover(){
 	console.log("made it to table remover")
 	for(i=0; i < products.length ; i++){
 		if (tBody.firstChild){
-		tBody.removeChild(tBody.firstChild);
+			tBody.removeChild(tBody.firstChild);
 		}
 	}
 }
+
+//let's build a bar graph with chart.js
+
+var barData = {
+    labels: [],
+    datasets: [
+        {
+            // label: "My First dataset",
+            fillColor: "rgba(77, 5, 31,.8)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: null
+        }
+    ]
+};
+
+var ctx = document.getElementById("barGraph").getContext("2d");
+var graph1 = new Chart(ctx).Bar(barData);
+
+
+
+//let's make a pie chart with chart.js
+var pieData = [];
+var pieOptions = {
+	segmentShowStroke : false,
+	animateScale : true
+}
+
+var pieGraph = document.getElementById("pieGraph").getContext("2d");
+var graph2 = new Chart(pieGraph).Pie(pieData, pieOptions);
+
+function randomColor(){
+	var array = [];
+	for (var i = 0 ; i < 6; i++){
+		array.push(Math.floor(Math.random() * 10));
+	}
+	return "#" + array.join("");
+}
+
+function graphMaker(products) {
+		graph1.destroy();
+		graph2.destroy();
+		var nameArray = [];
+		var voteArray = [];
+		var pieArray = [];
+		for (var i = 0 ; i < products.length ; i++){
+			nameArray.push(products[i].name);
+			voteArray.push(products[i].voteRate());
+		}
+		for (var i = 0; i < products.length ; i++){
+			pieArray.push({label: nameArray[i], value: voteArray[i], color: randomColor()})
+		}
+		barData.labels = nameArray;
+		barData.datasets[0].data = voteArray;
+		graph1 = new Chart(ctx).Bar(barData);
+
+		pieData = pieArray;
+		graph2 = new Chart(pieGraph).Pie(pieData, pieOptions);
+}
+
+//object creator function calls
 productList(images);
 
 
@@ -156,12 +221,15 @@ resBut.addEventListener("click", function(e){
 		tableRemover();
 		console.log("passed remover");
 		tblSection.style.display = "block";
+		graphs.style.display = "block";
+		graphMaker(products);
+		console.log("made it to graphMaker");
 		for (i = 0 ; i < products.length ; i++){
 			var trEl = document.createElement("tr");
 			var th = document.createElement("th");
 			th.textContent = products[i].name;
 			var td1 = document.createElement("td");
-			td1.textContent = Math.floor(products[i].voteRate() * 100);
+			td1.textContent = products[i].voteRate();
 			var td2 = document.createElement("td");
 			td2.textContent = products[i].tally;
 			var td3 = document.createElement("td");
@@ -174,5 +242,3 @@ resBut.addEventListener("click", function(e){
 		}
 	}
 });
-
-

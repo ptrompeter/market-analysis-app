@@ -1,6 +1,6 @@
 //global variables
 
-var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon.jpg", "pen.jpg", "shark.jpg", "sweep.png", 
+var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon.jpg", "pen.jpg", "shark.jpg", "sweep.png",
 "unicorn.jpg", "usb.gif"];
 var products = [];
 var display = [];
@@ -174,5 +174,3 @@ resBut.addEventListener("click", function(e){
 		}
 	}
 });
-
-

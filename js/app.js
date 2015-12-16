@@ -1,6 +1,6 @@
 //global variables
 
-var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon.jpg", "pen.jpg", "shark.jpg", "sweep.png", 
+var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon.jpg", "pen.jpg", "shark.jpg", "sweep.png",
 "unicorn.jpg", "usb.gif"];
 var products = [];
 var display = [];
@@ -46,7 +46,6 @@ function arrayMaker(products){
 			array.push(num);
 		}
 	}
-	console.log(array);
 	return array;
 }
 
@@ -112,15 +111,71 @@ function newPics(){
 	}
 	// tblSection.style.display = 'none';
 }
-//object creator function calls
+
 function tableRemover(){
 	console.log("made it to table remover")
 	for(i=0; i < products.length ; i++){
 		if (tBody.firstChild){
-		tBody.removeChild(tBody.firstChild);
+			tBody.removeChild(tBody.firstChild);
 		}
 	}
 }
+
+//let's build a bar graph with chart.js
+
+var data = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+        {
+            // label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        },
+        {
+            // label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }
+    ]
+};
+
+var ctx = document.getElementById("barGraph").getContext("2d");
+var graph1 = new Chart(ctx).Bar(data);
+//let's make a pie chart with chart.js
+var pieData = [
+	{
+		value: 20,
+		color:"#878BB6"
+	},
+	{
+		value : 40,
+		color : "#4ACAB4"
+	},
+	{
+		value : 10,
+		color : "#FF8153"
+	},
+	{
+		value : 30,
+		color : "#FFEA88"
+	}
+];
+var pieOptions = {
+	segmentShowStroke : false,
+	animateScale : true
+}
+
+var pieGraph = document.getElementById("pieGraph").getContext("2d");
+new Chart(pieGraph).Pie(pieData, pieOptions);
+
+
+//object creator function calls
 productList(images);
 
 
@@ -174,5 +229,3 @@ resBut.addEventListener("click", function(e){
 		}
 	}
 });
-
-

@@ -1,7 +1,7 @@
 //global variables
+console.log(localStorage.getItem("products"))
 
 var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon2.jpg", "pen.jpg", "shark.jpg", "sweep.png",
-
 "unicorn.jpg", "usb.gif"];
 var products = [];
 var display = [];
@@ -15,7 +15,9 @@ var tblSection = document.getElementById("tblSection");
 var resTbl = document.getElementById("resTbl");
 var tBody = document.getElementById("appendHere");
 var graphs = document.getElementById("graphs");
-
+var clear = document.getElementById('clear');
+var changeGraphs = document.getElementById('changeGraphs');
+var gTracker = 0;
 //product constructor
 
 var Product = function(name){
@@ -29,6 +31,41 @@ var Product = function(name){
 Product.prototype.voteRate = function(){
 	return Math.floor(this.tally / this.views * 100);
 };
+
+
+// trying out local storage. building functionality as an object this time.
+var locStore = {
+	locSupport: function(){
+		try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+		} catch (e) {
+			return false;
+		}
+	},
+	checkStore: function() {
+		var loadedProducts;
+		if (localStorage.getItem("products")){
+			loadedProducts = JSON.parse(localStorage.getItem("products"));
+			for (var i = 0; i < products.length; i++){
+				products[i].name = loadedProducts[i].name;
+				products[i].tally = loadedProducts[i].tally;
+				products[i].views = loadedProducts[i].views;
+				products[i].fileSource = loadedProducts[i].fileSource;
+			}
+			voteCount = JSON.parse(localStorage.getItem("votes"));
+		} 
+		// } else {
+		// 	this.makeStore();
+		// }
+	},
+	makeStore: function(){
+		var jsonProducts = JSON.stringify(products);
+		localStorage.setItem("products", jsonProducts);
+		var jsonVotes = JSON.stringify(voteCount);
+		localStorage.setItem("votes", jsonVotes);
+	}
+};
+
 
 //function declarations
 
@@ -118,7 +155,7 @@ function newPics(){
 }
 
 function tableRemover(){
-	console.log("made it to table remover")
+	console.log("made it to table remover");
 	for(i=0; i < products.length ; i++){
 		if (tBody.firstChild){
 			tBody.removeChild(tBody.firstChild);
@@ -152,7 +189,7 @@ var pieData = [];
 var pieOptions = {
 	segmentShowStroke : false,
 	animateScale : true
-}
+};
 
 var pieGraph = document.getElementById("pieGraph").getContext("2d");
 var graph2 = new Chart(pieGraph).Pie(pieData, pieOptions);
@@ -167,7 +204,7 @@ function randomColor(){
 
 function graphMaker(products) {
 		graph1.destroy();
-		graph2.destroy();
+		// graph2.destroy();
 		var nameArray = [];
 		var voteArray = [];
 		var pieArray = [];
@@ -180,14 +217,19 @@ function graphMaker(products) {
 		}
 		barData.labels = nameArray;
 		barData.datasets[0].data = voteArray;
+		if (gTracker % 2 === 0){
 		graph1 = new Chart(ctx).Bar(barData);
-
+		} else {
 		pieData = pieArray;
-		graph2 = new Chart(pieGraph).Pie(pieData, pieOptions);
+		graph1 = new Chart(ctx).Pie(pieData, pieOptions);
+		}
+
 }
 
 //object creator function calls
 productList(images);
+locStore.checkStore();
+
 
 
 //other function calls
@@ -196,23 +238,44 @@ makeDisplay(arrayMaker(products), products);
 showDisplay(display);
 
 //adding event listeners
+// pics.addEventListener ("click", function(e){
+// 	console.log(e.target);
+// });
+
 pic1.addEventListener("click", function(e){
 	voteCount += 1;
 	products[randNums[0]].tally += 1;
+	gTracker = 0;
+	locStore.makeStore();
 	newPics();
 });
 
 pic2.addEventListener("click", function(e){
 	voteCount += 1;
 	products[randNums[1]].tally += 1;
+	gTracker = 0;
+	locStore.makeStore();
 	newPics();
 });
 
 pic3.addEventListener("click", function(e){
 	voteCount += 1;
 	products[randNums[2]].tally += 1;
+	gTracker = 0;
+	locStore.makeStore();
 	newPics();
 });
+
+clear.addEventListener("click", function(e){
+	console.log("clear is listening");
+	localStorage.clear();
+});
+
+changeGraphs.addEventListener("click", function(e){
+	graphMaker(products);
+	gTracker += 1;
+});
+
 resBut.addEventListener("click", function(e){
 	console.log("listener is listening");
 	if (!checkZero()){

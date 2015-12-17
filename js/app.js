@@ -16,6 +16,8 @@ var resTbl = document.getElementById("resTbl");
 var tBody = document.getElementById("appendHere");
 var graphs = document.getElementById("graphs");
 var clear = document.getElementById('clear');
+var changeGraphs = document.getElementById('changeGraphs');
+var gTracker = 0;
 //product constructor
 
 var Product = function(name){
@@ -202,7 +204,7 @@ function randomColor(){
 
 function graphMaker(products) {
 		graph1.destroy();
-		graph2.destroy();
+		// graph2.destroy();
 		var nameArray = [];
 		var voteArray = [];
 		var pieArray = [];
@@ -215,15 +217,17 @@ function graphMaker(products) {
 		}
 		barData.labels = nameArray;
 		barData.datasets[0].data = voteArray;
+		if (gTracker % 2 === 0){
 		graph1 = new Chart(ctx).Bar(barData);
-
+		} else {
 		pieData = pieArray;
-		graph2 = new Chart(pieGraph).Pie(pieData, pieOptions);
+		graph1 = new Chart(ctx).Pie(pieData, pieOptions);
+		}
+
 }
 
 //object creator function calls
 productList(images);
-console.log("local storage products: " + localStorage.getItem("products"))
 locStore.checkStore();
 
 
@@ -241,6 +245,7 @@ showDisplay(display);
 pic1.addEventListener("click", function(e){
 	voteCount += 1;
 	products[randNums[0]].tally += 1;
+	gTracker = 0;
 	locStore.makeStore();
 	newPics();
 });
@@ -248,6 +253,7 @@ pic1.addEventListener("click", function(e){
 pic2.addEventListener("click", function(e){
 	voteCount += 1;
 	products[randNums[1]].tally += 1;
+	gTracker = 0;
 	locStore.makeStore();
 	newPics();
 });
@@ -255,6 +261,7 @@ pic2.addEventListener("click", function(e){
 pic3.addEventListener("click", function(e){
 	voteCount += 1;
 	products[randNums[2]].tally += 1;
+	gTracker = 0;
 	locStore.makeStore();
 	newPics();
 });
@@ -263,6 +270,12 @@ clear.addEventListener("click", function(e){
 	console.log("clear is listening");
 	localStorage.clear();
 });
+
+changeGraphs.addEventListener("click", function(e){
+	graphMaker(products);
+	gTracker += 1;
+});
+
 resBut.addEventListener("click", function(e){
 	console.log("listener is listening");
 	if (!checkZero()){

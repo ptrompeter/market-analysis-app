@@ -108,9 +108,9 @@ function productList(images){
 }
 
 function showDisplay(display){
-	pic1.innerHTML = "<img src ='" + display[0].fileSource + "''>";
-	pic2.innerHTML = "<img src ='" + display[1].fileSource + "''>";
-	pic3.innerHTML = "<img src ='" + display[2].fileSource + "''>";
+	pic1.innerHTML = "<img src ='" + display[0].fileSource + "' id='picOne'>";
+	pic2.innerHTML = "<img src ='" + display[1].fileSource + "' id='picTwo'>";
+	pic3.innerHTML = "<img src ='" + display[2].fileSource + "' id='picThree'>";
 
 }
 
@@ -238,32 +238,16 @@ makeDisplay(arrayMaker(products), products);
 showDisplay(display);
 
 //adding event listeners
-// pics.addEventListener ("click", function(e){
-// 	console.log(e.target);
-// });
-
-pic1.addEventListener("click", function(e){
-	voteCount += 1;
-	products[randNums[0]].tally += 1;
-	gTracker = 0;
-	locStore.makeStore();
-	newPics();
-});
-
-pic2.addEventListener("click", function(e){
-	voteCount += 1;
-	products[randNums[1]].tally += 1;
-	gTracker = 0;
-	locStore.makeStore();
-	newPics();
-});
-
-pic3.addEventListener("click", function(e){
-	voteCount += 1;
-	products[randNums[2]].tally += 1;
-	gTracker = 0;
-	locStore.makeStore();
-	newPics();
+pics.addEventListener("click", function(e){
+	console.log(e.target);
+	if (e.target.id !== "pics"){
+		var num = e.target.id === 'picOne' ? 0: e.target.id === 'picTwo' ? 1: 2;
+		voteCount += 1;
+		products[randNums[num]].tally += 1;
+		gTracker = 0;
+		locStore.makeStore();
+		newPics();		
+	}
 });
 
 clear.addEventListener("click", function(e){
@@ -272,8 +256,8 @@ clear.addEventListener("click", function(e){
 });
 
 changeGraphs.addEventListener("click", function(e){
-	graphMaker(products);
 	gTracker += 1;
+	graphMaker(products);
 });
 
 resBut.addEventListener("click", function(e){
@@ -304,5 +288,7 @@ resBut.addEventListener("click", function(e){
 			trEl.appendChild(td3);
 			tBody.appendChild(trEl);
 		}
+	} else {
+		console.log("checkZero failed")
 	}
 });

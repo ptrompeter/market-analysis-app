@@ -24,3 +24,6 @@ img {
 /*#graphs {
 	display: none;
 }*/
+#pics {
+	min-height: 350px;
+}

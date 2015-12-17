@@ -8,6 +8,7 @@
   <title>market analysis app</title>
   <meta name="description" content="">
   <meta name="author" content="">
+  <script src="chart.js"></script>
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -15,7 +16,7 @@
 
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 
   <!-- CSS
@@ -35,8 +36,8 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <header>
-      <section class="row">CLICK ON A PICTURE TO VOTE!
-      </section>
+      <h1 class="row">CLICK ON A PICTURE TO VOTE!
+      </h1>
     </header>
     <main>
       <section class="row" id="pics">
@@ -45,9 +46,9 @@
         <div class="four columns" id="pic3"></div>
       </section>
       <section class="row" id="results">
-      <button type="button" id="resBut">Show Results</button>
-      <button type="button" id="clear">Clear Local Data</button>
-      <button type="button" id="changeGraphs">Change Graphs</button>
+        <button type="button" id="resBut">Show Results</button>
+        <button type="button" id="clear">Clear Local Data</button>
+        <button type="button" id="changeGraphs">Change Graphs</button>
       </section>
       <section class="row" id="graphs">
         <div class="four columns offset-by-one column" id="graph1">
@@ -57,27 +58,12 @@
           <canvas id="pieGraph" width="300" height="300"></canvas>
         </div>
       </section>
-      <section class = "row" id="tblSection">
-        <table id="resTbl">
-          <thead>
-            <tr id="contents">
-              <th>"Name"</th>
-              <th>"Click %"</th>
-              <th>"votes"</th>
-              <th>"Views"</th>
-            </tr>
-          </thead>
-          <tbody id="appendHere">
-          </tbody>
-
-        </table>
-      </section>
     </main>
   </div>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script src="chart.js"></script>
+
   <script src="js/app.js"></script>
 </body>
 </html>

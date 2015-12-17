@@ -1,5 +1,4 @@
 //global variables
-console.log(localStorage.getItem("products"))
 
 var images = ["boots.jpg", "chair.jpg", "scissors.jpg", "water_can.jpg", "wine_glass.jpg", "bag.jpg", "banana.jpg", "cthulhu.jpg", "dragon2.jpg", "pen.jpg", "shark.jpg", "sweep.png",
 "unicorn.jpg", "usb.gif"];
@@ -11,9 +10,6 @@ var pic1 = document.getElementById("pic1");
 var pic2 = document.getElementById("pic2");
 var pic3 = document.getElementById("pic3");
 var resBut = document.getElementById("resBut");
-var tblSection = document.getElementById("tblSection");
-var resTbl = document.getElementById("resTbl");
-var tBody = document.getElementById("appendHere");
 var graphs = document.getElementById("graphs");
 var clear = document.getElementById('clear');
 var changeGraphs = document.getElementById('changeGraphs');
@@ -32,16 +28,8 @@ Product.prototype.voteRate = function(){
 	return Math.floor(this.tally / this.views * 100);
 };
 
-
 // trying out local storage. building functionality as an object this time.
 var locStore = {
-	locSupport: function(){
-		try {
-		return 'localStorage' in window && window['localStorage'] !== null;
-		} catch (e) {
-			return false;
-		}
-	},
 	checkStore: function() {
 		var loadedProducts;
 		if (localStorage.getItem("products")){
@@ -54,9 +42,6 @@ var locStore = {
 			}
 			voteCount = JSON.parse(localStorage.getItem("votes"));
 		} 
-		// } else {
-		// 	this.makeStore();
-		// }
 	},
 	makeStore: function(){
 		var jsonProducts = JSON.stringify(products);
@@ -97,8 +82,6 @@ function makeDisplay(arrayFunc, products){
 	for (var i = 0 ; i < randNums.length ; i++){
 		products[randNums[i]].views += 1;
 	}
-	console.log([randNums[i]]);
-	console.log(display);
 }
 
 function productList(images){
@@ -135,31 +118,17 @@ function checkZero(){
 function productSort(){
 	if (!checkZero()){
 		products.sort(compare);
-	} else {
-		console.log("insufficient data");
 	}
 }
 
 function newPics(){
 	makeDisplay(arrayMaker(products), products);
 	showDisplay(display);
-	tblSection.style.display = "none";
 	graphs.style.display = "none";
-
 	if (voteCount % 15 === 0){
 		resBut.style.display = 'block';
 	} else {
 		resBut.style.display = 'none';
-	}
-	// tblSection.style.display = 'none';
-}
-
-function tableRemover(){
-	console.log("made it to table remover");
-	for(i=0; i < products.length ; i++){
-		if (tBody.firstChild){
-			tBody.removeChild(tBody.firstChild);
-		}
 	}
 }
 
@@ -181,8 +150,6 @@ var barData = {
 
 var ctx = document.getElementById("barGraph").getContext("2d");
 var graph1 = new Chart(ctx).Bar(barData);
-
-
 
 //let's make a pie chart with chart.js
 var pieData = [];
@@ -265,30 +232,8 @@ resBut.addEventListener("click", function(e){
 	if (!checkZero()){
 		console.log("passed checkZero");
 		productSort();
-		console.log("passed sort");
-		tableRemover();
-		console.log("passed remover");
-		tblSection.style.display = "block";
-		graphs.style.display = "block";
+		graphs.style.display = "in-line";
 		graphMaker(products);
-		console.log("made it to graphMaker");
-		for (i = 0 ; i < products.length ; i++){
-			var trEl = document.createElement("tr");
-			var th = document.createElement("th");
-			th.textContent = products[i].name;
-			var td1 = document.createElement("td");
-			td1.textContent = products[i].voteRate();
-			var td2 = document.createElement("td");
-			td2.textContent = products[i].tally;
-			var td3 = document.createElement("td");
-			td3.textContent = products[i].views;
-			trEl.appendChild(th);
-			trEl.appendChild(td1);
-			trEl.appendChild(td2);
-			trEl.appendChild(td3);
-			tBody.appendChild(trEl);
-		}
 	} else {
-		console.log("checkZero failed")
 	}
 });
